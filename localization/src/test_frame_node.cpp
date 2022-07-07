@@ -2,37 +2,38 @@
 #include <glog/logging.h>
 #include <memory>
 
-#include "localization/global_definition/global_definition.h"
-#include "localization/subscriber/cloud_subscriber.h"
-#include "localization/subscriber/gnss_subscriber.h"
-#include "localization/subscriber/imu_subscriber.h"
-#include "localization/publisher/cloud_publisher.h"
-#include "localization/publisher/odometry_publisher.h"
-#include "localization/tf_listener/tf_listener.h"
+#include "global_definition/global_definition.h"
+#include "subscriber/cloud_subscriber.h"
+#include "subscriber/gnss_subscriber.h"
+#include "subscriber/imu_subscriber.h"
+#include "publisher/cloud_publisher.h"
+#include "publisher/odometry_publisher.h"
+#include "tf_listener/tf_listener.h"
 
 #include <nav_msgs/msg/path.hpp>
 
-#include "common/lua_parameter_dictionary.hpp"
+#include "common/configuration_file_resolver.hpp"
 #include "proto/test.pb.h"
+#include "proto/test2.pb.h"
 
 using namespace location;
 
-proto::TestInputMessage CreateTestInputOption(common::LuaParameterDictionary* const lua_parameter_dictionary) {
-    proto::TestInputMessage option;
-    option.test1 = CreateTest2Option(
-        lua_parameter_dictionary->GetDictionary("test1").get());
-    option.intput_a = lua_parameter_dictionary->GetDouble("intput_a");
-    option.intput_b = lua_parameter_dictionary->GetDouble("intput_b");
-    option.intput_c = lua_parameter_dictionary->GetDouble("intput_c");
-    return option;
+proto::Test2 CreateTest2Options(common::LuaParameterDictionary* const lua_parameter_dictionary) {
+    proto::Test2 options;
+    options.set_a(lua_parameter_dictionary->GetDouble("a"));
+    options.set_b(lua_parameter_dictionary->GetDouble("b"));
+    options.set_c(lua_parameter_dictionary->GetDouble("c"));
+    return options;
 }
 
-proto::Test2 CreateTest2Option(common::LuaParameterDictionary* const lua_parameter_dictionary) {
-    proto::Test2 option;
-    option.a = lua_parameter_dictionary->GetDouble("a");
-    option.b = lua_parameter_dictionary->GetDouble("b");
-    option.c = lua_parameter_dictionary->GetDouble("c");
-    return option;
+proto::TestInputMessage CreateTestInputOptions(common::LuaParameterDictionary* const lua_parameter_dictionary) {
+    proto::TestInputMessage options;
+    *options.mutable_test1() = CreateTest2Options(
+        lua_parameter_dictionary->GetDictionary("test1").get());
+    options.set_intput_a(lua_parameter_dictionary->GetDouble("intput_a"));
+    options.set_intput_b(lua_parameter_dictionary->GetDouble("intput_b"));
+    options.set_intput_c(lua_parameter_dictionary->GetDouble("intput_c"));
+    return options;
 }
 
 int main(int argc, char *argv[]) {
@@ -42,6 +43,17 @@ int main(int argc, char *argv[]) {
 
     LOG(INFO) << "glog success" << std::endl;
     //          << "WORK_SPACE_PATH:" << WORK_SPACE_PATH << std::endl;
+    std::string configuration_directory = "/home/ldd/dev_ws/src/ros2_ws/localization/configure_files";
+    std::string configuration_basename = "configuration.lua";
+    //std::vector<std::string> configuration_directorys = split(configuration_directory, '/');
+    auto file_resolver = std::make_unique<common::ConfigurationFileResolver>(std::vector<std::string>{configuration_directory});
+    const std::string code =
+        file_resolver->GetFileContentOrDie(configuration_basename);
+    common::LuaParameterDictionary lua_parameter_dictionary(code, std::move(file_resolver));
+    proto::TestInputMessage options = CreateTestInputOptions(&lua_parameter_dictionary);
+    LOG(INFO) << "Test2 a = " << options.test1().a();
+    LOG(INFO) << "Test2 a = " << options.test1().a();
+    LOG(INFO) << "Test2 a = " << options.test1().a();
 
     rclcpp::init(argc, argv);
     auto node = rclcpp::Node::make_shared("test_frame_node");

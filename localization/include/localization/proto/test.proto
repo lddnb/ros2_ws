@@ -1,6 +1,8 @@
 syntax = "proto3";
 package location.proto;
 
+import "include/localization/proto/test2.proto";
+
 message TestInputMessage {
     location.proto.Test2 test1 = 1;
     double intput_a = 2;

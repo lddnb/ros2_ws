@@ -1,4 +1,4 @@
-#include "localization/subscriber/gnss_subscriber.h"
+#include "subscriber/gnss_subscriber.h"
 
 using std::placeholders::_1;
 

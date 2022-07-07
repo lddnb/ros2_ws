@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 
-#include "lua.hpp"
+#include "lua5.2/lua.hpp"
 #include "glog/logging.h"
 
 namespace common {

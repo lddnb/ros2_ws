@@ -3,7 +3,7 @@
 #include <deque>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/nav_sat_fix.hpp>
-#include "localization/sensor_data/gnss_data.h"
+#include "sensor_data/gnss_data.h"
 
 namespace location {
 class GnssSubscriber {

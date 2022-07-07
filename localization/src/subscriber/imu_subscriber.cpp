@@ -1,4 +1,4 @@
-#include "localization/subscriber/imu_subscriber.h"
+#include "subscriber/imu_subscriber.h"
 
 using std::placeholders::_1;
 

@@ -5,7 +5,7 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 
-#include "localization/sensor_data/cloud_data.h"
+#include "sensor_data/cloud_data.h"
 
 namespace location {
 class CloudSubscriber {

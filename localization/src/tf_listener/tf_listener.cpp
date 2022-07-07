@@ -1,4 +1,4 @@
-#include "localization/tf_listener/tf_listener.h"
+#include "tf_listener/tf_listener.h"
 #include <glog/logging.h>
 
 #include <Eigen/Geometry>
@@ -7,7 +7,7 @@ namespace location {
 TFListener::TFListener(const rclcpp::Node::SharedPtr& node, std::string base_frame_id, std::string child_frame_id)
     :base_frame_id_(base_frame_id), child_frame_id_(child_frame_id) {
     node_= node;
-    tf_buffer_ = std::make_unique<tf2_ros::Buffer>(node_->get_clock());
+    tf_buffer_ = std::make_shared<tf2_ros::Buffer>(node_->get_clock());
     listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 }
 

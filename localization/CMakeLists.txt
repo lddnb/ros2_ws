@@ -12,11 +12,14 @@ endif()
 set(WORK_SPACE_PATH ${PROJECT_SOURCE_DIR})
 configure_file (
   ${PROJECT_SOURCE_DIR}/include/localization/global_definition/global_definition.h.in
-  ${PROJECT_SOURCE_DIR}/include/localization/global_definition/global_definition.h
+  ${PROJECT_BINARY_DIR}/include/localization/global_definition/global_definition.h
   @ONLY
 )
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/config.h.cmake
+  ${PROJECT_BINARY_DIR}/include/localization/common/config.h)
 
-include_directories(include)
+include_directories(include/${PROJECT_NAME})
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
@@ -46,7 +49,12 @@ include_directories(${PCL_INCLUDE_DIRS})
 find_package(Glog REQUIRED)
 
 #protobuf
-find_package(Protobuf 3.0.0 REQUIRED)
+find_package(Protobuf REQUIRED)
+include_directories(${PROTOBUF_INCLUDE_DIR})
+
+#lua
+find_package(Lua 5.2 REQUIRED)
+include_directories(${LUA_INCLUDE_DIR})
 
 #GeographicLib
 add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/GeographicLib)
@@ -55,10 +63,13 @@ include_directories(${PROJECT_SOURCE_DIR}/third_party/GeographicLib/include)
 set(ALL_TARGET_LIBRARIES 
   ${EIGEN3_LIBS}
   ${PCL_LIBRARIES}
+  ${LUA_LIBRARIES}
+  ${PROTOBUF_LIBRARY}
   glog::glog
   libGeographiccc
 )
 
+file(GLOB_RECURSE ALL_PROTOS "*.proto")
 set(ALL_PROTO_SRCS)
 set(ALL_PROTO_HDRS)
 foreach(ABS_FIL ${ALL_PROTOS})
@@ -79,7 +90,11 @@ foreach(ABS_FIL ${ALL_PROTOS})
     COMMENT "Running C++ protocol buffer compiler on ${ABS_FIL}"
     VERBATIM
   )
+  message("pb.h = " ${PROJECT_BINARY_DIR}/${DIR}/${FIL_WE}.pb.h)
 endforeach()
+
+include_directories(${PROJECT_BINARY_DIR}/include/${PROJECT_NAME})
+include_directories(${PROJECT_BINARY_DIR})
 
 file(GLOB_RECURSE ALL_SRCS "*.cpp")
 file(GLOB_RECURSE NODE_SRCS "src/*_node.cpp")
@@ -87,9 +102,9 @@ file(GLOB_RECURSE THIRD_PARTY_SRCS "third_party/*.cpp")
 list(REMOVE_ITEM ALL_SRCS ${NODE_SRCS})
 list(REMOVE_ITEM ALL_SRCS ${THIRD_PARTY_SRCS})
 
-message("ALL_SRCS = " ${ALL_SRCS})
+#message("ALL_SRCS = " ${ALL_SRCS})
 
-add_executable(test_frame_node src/test_frame_node.cpp ${ALL_SRCS})
+add_executable(test_frame_node src/test_frame_node.cpp ${ALL_SRCS} ${ALL_PROTO_SRCS})
 ament_target_dependencies(test_frame_node 
   std_msgs 
   rclcpp
