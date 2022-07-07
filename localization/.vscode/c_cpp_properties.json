@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/ros/galactic/include",
+                "/usr/include/eigen3",
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/third_party/**",
+                "/usr/local/pcl-1.12.1/include/pcl-1.12"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
