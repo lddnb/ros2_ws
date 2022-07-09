@@ -1,11 +1,10 @@
 #include "subscriber/cloud_subscriber.h"
 
-using std::placeholders::_1;
-
 namespace location {
 CloudSubscriber::CloudSubscriber(const rclcpp::Node::SharedPtr& node, std::string topic_name, size_t buff_size) {
     node_ = node;
-    subscriber_ = node_->create_subscription<sensor_msgs::msg::PointCloud2>(topic_name, buff_size, std::bind(&CloudSubscriber::msg_callback, this, _1));
+    subscriber_ = node_->create_subscription<sensor_msgs::msg::PointCloud2>(topic_name, buff_size, 
+                    std::bind(&CloudSubscriber::msg_callback, this, std::placeholders::_1));
 }
 
 void CloudSubscriber::ParseData(std::deque<CloudData>& deque_cloud_data) {

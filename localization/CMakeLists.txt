@@ -39,9 +39,9 @@ find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
 #PCL
-find_package(PCL REQUIRED
-PATHS /usr/local/pcl-1.12.1
-NO_DEFAULT_PATH)
+find_package(PCL REQUIRED)
+#PATHS /usr/local/pcl-1.12.1
+#NO_DEFAULT_PATH)
 list(REMOVE_ITEM PCL_LIBRARIES "vtkproj4")
 include_directories(${PCL_INCLUDE_DIRS})
 

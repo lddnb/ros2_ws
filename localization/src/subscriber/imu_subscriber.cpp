@@ -1,12 +1,10 @@
 #include "subscriber/imu_subscriber.h"
 
-using std::placeholders::_1;
-
 namespace location {
 IMUSubscriber::IMUSubscriber(const rclcpp::Node::SharedPtr& node, std::string topic_name, size_t buff_size) {
     node_ = node;
     subscriber_ = node_->create_subscription<sensor_msgs::msg::Imu>(
-        topic_name, buff_size, std::bind(&IMUSubscriber::msg_callback, this, _1)
+        topic_name, buff_size, std::bind(&IMUSubscriber::msg_callback, this, std::placeholders::_1)
     );
 }
 

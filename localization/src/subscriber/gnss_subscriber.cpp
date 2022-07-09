@@ -1,12 +1,10 @@
 #include "subscriber/gnss_subscriber.h"
 
-using std::placeholders::_1;
-
 namespace location {
 GnssSubscriber::GnssSubscriber(const rclcpp::Node::SharedPtr& node, std::string topic_name, size_t buff_size) {
     node_ = node;
     subscriber_ = node_->create_subscription<sensor_msgs::msg::NavSatFix>(
-        topic_name, buff_size, std::bind(&GnssSubscriber::msg_callback, this, _1)
+        topic_name, buff_size, std::bind(&GnssSubscriber::msg_callback, this, std::placeholders::_1)
     );
 }    
 
