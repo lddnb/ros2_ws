@@ -15,7 +15,7 @@ class IMUSubscriber {
 
 
     private:
-    void msg_callback(const sensor_msgs::msg::Imu& imu_msg_ptr);
+    void msg_callback(const sensor_msgs::msg::Imu::SharedPtr imu_msg_ptr);
 
     private:
     rclcpp::Node::SharedPtr node_;

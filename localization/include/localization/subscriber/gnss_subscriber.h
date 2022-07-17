@@ -13,7 +13,7 @@ class GnssSubscriber {
     void ParseData(std::deque<GnssData>& deque_gnss_data);
 
     private:
-    void msg_callback(const sensor_msgs::msg::NavSatFix& nav_sat_fix_ptr);
+    void msg_callback(const sensor_msgs::msg::NavSatFix::SharedPtr nav_sat_fix_ptr);
 
     private:
     rclcpp::Node::SharedPtr node_;

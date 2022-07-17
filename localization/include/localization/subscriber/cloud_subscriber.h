@@ -15,7 +15,7 @@ class CloudSubscriber {
     void ParseData(std::deque<CloudData>& deque_cloud_data);
 
     private:
-    void msg_callback(const sensor_msgs::msg::PointCloud2& cloud_msg);
+    void msg_callback(const sensor_msgs::msg::PointCloud2::SharedPtr cloud_msg);
 
     private:
     rclcpp::Node::SharedPtr node_;

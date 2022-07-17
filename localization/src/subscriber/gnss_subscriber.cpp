@@ -15,14 +15,14 @@ void GnssSubscriber::ParseData(std::deque<GnssData>& deque_gnss_data) {
     }
 }
 
-void GnssSubscriber::msg_callback(const sensor_msgs::msg::NavSatFix& nav_sat_fix_ptr) {
+void GnssSubscriber::msg_callback(const sensor_msgs::msg::NavSatFix::SharedPtr nav_sat_fix_ptr) {
     GnssData gnss_data;
-    gnss_data.time = nav_sat_fix_ptr.header.stamp.sec;
-    gnss_data.latitude = nav_sat_fix_ptr.latitude;
-    gnss_data.longitude = nav_sat_fix_ptr.longitude;
-    gnss_data.altitude = nav_sat_fix_ptr.altitude;
-    gnss_data.status = nav_sat_fix_ptr.status.status;
-    gnss_data.service = nav_sat_fix_ptr.status.service;
+    gnss_data.time = nav_sat_fix_ptr->header.stamp.sec;
+    gnss_data.latitude = nav_sat_fix_ptr->latitude;
+    gnss_data.longitude = nav_sat_fix_ptr->longitude;
+    gnss_data.altitude = nav_sat_fix_ptr->altitude;
+    gnss_data.status = nav_sat_fix_ptr->status.status;
+    gnss_data.service = nav_sat_fix_ptr->status.service;
 
     new_gnss_data_.emplace_back(gnss_data);
 }

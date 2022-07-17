@@ -14,10 +14,10 @@ void CloudSubscriber::ParseData(std::deque<CloudData>& deque_cloud_data) {
     }
 }
 
-void CloudSubscriber::msg_callback(const sensor_msgs::msg::PointCloud2& cloud_msg) {
+void CloudSubscriber::msg_callback(const sensor_msgs::msg::PointCloud2::SharedPtr cloud_msg) {
     CloudData cloud_data;
-    cloud_data.time = cloud_msg.header.stamp.sec;
-    pcl::fromROSMsg(cloud_msg, cloud_data.cloud);
+    cloud_data.time = cloud_msg->header.stamp.sec;
+    pcl::fromROSMsg(*cloud_msg, cloud_data.cloud);
 
     new_cloud_data_.emplace_back(cloud_data);
 }
